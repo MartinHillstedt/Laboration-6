@@ -35,13 +35,30 @@ searchForm.addEventListener('submit', async function(event) {
 
     const searchPhrase = searchInput.value.trim();
 
+    messageSection.textContent ="";
+    recipeSection.innerHTML = "";
+
     if (validateSearch(searchPhrase)) {
-        const data = await fetchRecipe (searchPhrase);
-        console.log(data);
-    
+        
+        try {
+            
+            const data = await fetchRecipe (searchPhrase);
+        
+        if (data.recipes.length === 0 ) {
+        messageSection.textContent = "Inget recept kunde hittas, prova en annan sökfras.";
+        } else {
+
+            const recipesArray = data.recipes;
+
+            console.log(recipesArray);
+            renderRecipes(recipesArray);
+        }
+        } catch (error) {
+            messageSection.textContent = "Något gick fel vid hämtningen.";
     }
     
-});
+}
+}); 
 
 /**
  * Asynkron funktion som inväntar hämtning av receptets data från en API som .JSON och kastar ett fel i konsolen om hämtningen misslyckas.
@@ -64,4 +81,10 @@ async function fetchRecipe(searchPhrase) {
             
     }
 
+}
+
+function renderRecipes(recipe) {
+    
+    recipeSection.innerHTML = "";
+    
 }
