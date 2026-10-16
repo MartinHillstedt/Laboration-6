@@ -48,10 +48,10 @@ searchForm.addEventListener('submit', async function(event) {
         messageSection.textContent = "Inget recept kunde hittas, prova en annan sökfras.";
         } else {
 
-            const recipesArray = data.recipes;
+            const recipeArray = data.recipes;
 
-            console.log(recipesArray);
-            renderRecipes(recipesArray);
+            console.log(recipeArray);
+            renderRecipe(recipeArray[0]);
         }
         } catch (error) {
             messageSection.textContent = "Något gick fel vid hämtningen.";
@@ -83,8 +83,52 @@ async function fetchRecipe(searchPhrase) {
 
 }
 
-function renderRecipes(recipe) {
+function renderRecipe(recipe) {
     
     recipeSection.innerHTML = "";
+
+    const article = document.createElement ("article");
+
+    const title = document.createElement ("h3");
+    title.textContent = recipe.name;
+
+    const image = document.createElement ("img");
+    image.src = recipe.image;
+    image.alt = recipe.name;
+
+    const info = document.createElement ("div");
+    info.classList.add("recipe-info");
+    info.appendChild(createInfoParagraph("Servings:", recipe.servings));
+    info.appendChild(createInfoParagraph("Prep time:", `${recipe.prepTimeMinutes} minutes`));
+    info.appendChild(createInfoParagraph("Cooking time:", `${recipe.cookTimeMinutes} minutes`));
+    info.appendChild(createInfoParagraph("Difficulty:", recipe.difficulty));
+
+    article.append(
+        title,
+        image,
+        info,
+    );
+
+    recipeSection.appendChild (article);
+
+}     
+
+function createInfoParagraph(label, value) {
     
+    const paragraph = document.createElement("p");
+
+    const strong = document.createElement("strong");
+
+    strong.textContent = label;
+
+    paragraph.append(strong, `${value}`);
+
+    return paragraph;
+
 }
+
+
+    
+
+    
+
