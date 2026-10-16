@@ -35,10 +35,12 @@ searchForm.addEventListener('submit', async function(event) {
 
     const searchPhrase = searchInput.value.trim();
 
-    messageSection.textContent ="";
-    recipeSection.innerHTML = "";
-
+    
     if (validateSearch(searchPhrase)) {
+
+        messageSection.textContent ="";
+        
+        recipeSection.innerHTML = "";
         
         try {
             
@@ -50,10 +52,10 @@ searchForm.addEventListener('submit', async function(event) {
 
             const recipeArray = data.recipes;
 
-            console.log(recipeArray);
             renderRecipe(recipeArray[0]);
         }
         } catch (error) {
+            console.error(error)
             messageSection.textContent = "Något gick fel vid hämtningen.";
     }
     
@@ -103,10 +105,24 @@ function renderRecipe(recipe) {
     info.appendChild(createInfoParagraph("Cooking time:", `${recipe.cookTimeMinutes} minutes`));
     info.appendChild(createInfoParagraph("Difficulty:", recipe.difficulty));
 
+    const ingredientsHeader = document.createElement ("h4");
+    ingredientsHeader.textContent = "Ingredients";
+    
+    const ingredientsList = createList(recipe.ingredients, "ul");
+    
+    const instructionsHeader = document.createElement ("h4");
+    instructionsHeader.textContent = "Instructions";
+
+    const instructionsList = createList(recipe.instructions, "ol");
+
     article.append(
         title,
         image,
         info,
+        ingredientsHeader,
+        ingredientsList,
+        instructionsHeader,
+        instructionsList
     );
 
     recipeSection.appendChild (article);
@@ -121,13 +137,25 @@ function createInfoParagraph(label, value) {
 
     strong.textContent = label;
 
-    paragraph.append(strong, `${value}`);
+    paragraph.append(strong, ` ${value}`);
 
     return paragraph;
 
 }
 
+function createList(items, listType) {
+    
+    const list = document.createElement(listType);
 
+  items.forEach(function (item) {  
+    const listItem = document.createElement("li");
+    listItem.textContent = item;
+    list.appendChild(listItem);
+});
+
+    return list;
+
+}
     
 
     
