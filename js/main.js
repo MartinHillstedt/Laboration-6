@@ -28,6 +28,7 @@ function validateSearch(searchPhrase) {
     
 }
 
+//Anger om sökformulärets validering är godkänd eller misslyckad i konsolen.
 searchForm.addEventListener('submit', function(event) {
     event.preventDefault();
 
@@ -40,3 +41,18 @@ searchForm.addEventListener('submit', function(event) {
     }
     
 });
+
+//Asynkron funktion som inväntar hämtning av receptets data från en API som .JSON och kastar ett fel i konsolen om hämtningen misslyckas.
+async function fetchRecipe() {
+    try {
+        const response = await fetch('https://dummyjson.com/recipes/search?q=');
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error ('Hämtningen misslyckades, försök igen senare.', error);
+        throw error;   
+            
+    }
+
+}
